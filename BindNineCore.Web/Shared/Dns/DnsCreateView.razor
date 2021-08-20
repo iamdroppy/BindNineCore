@@ -1,21 +1,37 @@
 ﻿@using BindNineCore.Abstraction.Domains
 @using BindNineCore.Abstraction.Dns
 @using BindNineCore.Abstraction
+@using BindNineCore.Exceptions
 @inject IDnsCreate _dnsCreate;
+@inject IToastService _toastService
 
 @if (!_toggle)
 {
-    <button class="btn btn-dark" @onclick="() => { _toggle = true; } ">Add Record</button>
+    <button class="btn btn-dark" @onclick="() => { _toggle = true; } " style="margin-bottom: 15px;">Add Record</button>
 }
 else
 {
-    <EditForm Model="Model" OnValidSubmit="ValidSubmitAsync">
+    
+    <EditForm Model="Model" OnValidSubmit="ValidSubmitAsync" style="margin-bottom: 15px;">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
+        <div class="form-group">
+            <label for="subdomain">Subdomain</label>
+            <InputText id="subdomain" @bind-Value="@Model.Subdomain"  class="form-control" placeholder="Enter subdomain"/>
+        </div>
+        <div class="form-group">
+            <label for="recordType">Subdomain</label>
+            <InputSelect @bind-Value="@Model.RecordType" class="form-control" id="recordType">
+                <option value="@RecordType.Alias">Alias</option>
+                <option value="@RecordType.CNAME">CNAME</option>
+            </InputSelect>
+        </div>
+         <div class="form-group">
+             <label for="subdomain">Value</label>
+             <InputText id="domain" @bind-Value="@Model.Value" class="form-control" placeholder="Points to..."/>
+        </div>
 
-        <InputText id="domain" @bind-Value="@Model.Subdomain"/> to <InputText id="domain" @bind-Value="@Model.Value"/>
-
-        <button type="submit">Create</button>
+        <button type="submit" class="btn btn-success">Create</button>
     </EditForm>
 }
 @code
@@ -27,10 +43,18 @@ else
     
     private async Task ValidSubmitAsync()
     {
-        await _dnsCreate.AddDnsToDomainAsync(DomainId, Model.Subdomain, RecordType.Alias, Model.Value);
-        _toggle = false;
-        Model = new DomainModel();
-        await OnRefresh.InvokeAsync();
+        try
+        {
+            await _dnsCreate.AddDnsToDomainAsync(DomainId, Model.Subdomain, Model.RecordType, Model.Value);
+            _toggle = false;
+            Model = new DomainModel();
+            await OnRefresh.InvokeAsync();
+            _toastService.ShowSuccess($"Subdomain {Model.Subdomain} added successfully.");
+        }
+        catch (BindNineCoreException ex)
+        {
+            _toastService.ShowError(ex.Message);
+        }
     }
 
     private class DomainModel
@@ -38,7 +62,8 @@ else
         [Subdomain]
         public string Subdomain { get; set; }
 
-        [IpAddress]
-        public string Value { get; set; } = "127.0.0.1";
+        public string Value { get; set; }
+        
+        public RecordType RecordType { get; set; }
     }
 }

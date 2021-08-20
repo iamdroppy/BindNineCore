@@ -12,7 +12,8 @@ namespace BindNineCore.Abstraction
         /// IP address.
         /// </summary>
         Alias, // A
-        Nameserver // NS
+        Nameserver, // NS
+        CNAME
     }
 
     public static class RecordTypeExtensions
@@ -22,6 +23,7 @@ namespace BindNineCore.Abstraction
             {
                 RecordType.Alias => "A",
                 RecordType.Nameserver => "NS",
+                RecordType.CNAME => "CNAME",
                 _ => throw new ArgumentOutOfRangeException(nameof(type))
             };
     }

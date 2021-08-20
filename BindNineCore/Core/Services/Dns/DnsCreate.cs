@@ -68,10 +68,10 @@ namespace BindNineCore.Core.Services.Dns
         {
             if (!NetworkValidation.Subdomain(subdomain)) throw new InvalidSubdomainException(subdomain);
 
-            // TODO: add other record types and improve filtering
             if (Equals(value, null)) throw new ArgumentNullException(nameof(value));
-            if (recordType != RecordType.Alias) throw new NotImplementedException("We only support Alias records for now. for now.");
-            if (!IPAddress.TryParse(value, out _)) throw new InvalidAliasRecordValueException(value);
+
+            if (recordType == RecordType.Alias && !NetworkValidation.IpAddress(value))
+                throw new InvalidAliasRecordValueException(value);
         }
     }
 }

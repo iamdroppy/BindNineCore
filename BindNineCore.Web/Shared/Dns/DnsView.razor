@@ -1,16 +1,17 @@
 ﻿@using BindNineCore.Abstraction.Dns
 @using BindNineCore.Abstraction
+@using BindNineCore.Exceptions
 @inject IDnsDelete _dnsDelete
-
-<div class="col-md-6 lightgray-bg">
-    <div class="dns-box">
+@inject IToastService _toastService
+<div class="col-sm-12 col-md-4">
+    <div class="dns-box lightgray-bg">
         <input class="item" value="@Dns.Subdomain" disabled/>
         <select class="item" disabled><option>@Dns.RecordType.ToString()</option></select>
         <input class="item" disabled value="@Dns.Value"/>
 
         @if (Dns.CanBeDeleted)
         {
-            <p class="col-12"><button class="btn btn-danger" @onclick="DeleteAsync">Delete</button></p>
+            <p class="col-12" style="text-align: center"><button class="btn btn-danger" @onclick="DeleteAsync">Delete</button></p>
         }
     </div>
 </div>
@@ -22,7 +23,15 @@
 
     private async Task DeleteAsync(MouseEventArgs obj)
     {
-        await _dnsDelete.DeleteRecordAsync(Dns.Id);
-        await OnRefresh.InvokeAsync();
+        try
+        {
+            await _dnsDelete.DeleteRecordAsync(Dns.Id);
+            await OnRefresh.InvokeAsync();
+            _toastService.ShowSuccess($"Record deleted successfully.");
+        }
+        catch (BindNineCoreException ex)
+        {
+            _toastService.ShowError(ex.Message);
+        }
     }
 }

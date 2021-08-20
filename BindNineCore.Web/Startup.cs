@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BindNineCore.Web.Data;
+using Blazored.Toast;
 
 namespace BindNineCore.Web
 {
@@ -31,6 +32,7 @@ namespace BindNineCore.Web
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
 
+            services.AddBlazoredToast();
             BindConfig bindConfig = new();
             Configuration.GetSection("Bind9").Bind(bindConfig);    
             services.AddBindNine(bindConfig);

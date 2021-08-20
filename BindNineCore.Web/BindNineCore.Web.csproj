@@ -10,4 +10,17 @@
       <ProjectReference Include="..\BindNineCore\BindNineCore.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="named.template">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="zone.template">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Blazored.Toast" Version="3.1.2" />
+    </ItemGroup>
+
 </Project>

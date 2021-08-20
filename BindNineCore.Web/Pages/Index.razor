@@ -1,5 +1,15 @@
-﻿@page "/"
+﻿@page "/domains"
+@page "/"
 
-<h1>Hello, world!</h1>
+<DomainCreateView OnRefresh="@RefreshContent"/>
 
-Welcome to your new app.
+<DomainListView @ref="_domainListView"/>
+
+@code
+{
+    DomainListView _domainListView;
+    public async Task RefreshContent()
+    {
+        await _domainListView.FetchAsync();
+    }
+}

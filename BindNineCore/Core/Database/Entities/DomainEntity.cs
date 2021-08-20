@@ -23,10 +23,6 @@ namespace BindNineCore.Core.Database.Entities
             set => _domain = value?.ToLowerInvariant();
         }
 
-        public int Retry { get; set; } = 86400;
-        public int Expire { get; set; } = 3600;
-        public int NegativeCacheTtl { get; set; } = 604800;
-
         public virtual ICollection<DnsEntity> Dns { get; set; }
         
         public object ToLiquid()

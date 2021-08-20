@@ -1,10 +1,12 @@
 ﻿@using BindNineCore.Web.Pages
 @using BindNineCore.Abstraction.Domains
+@using BindNineCore.Exceptions
 @inject IDomainDelete _domainDelete
+@inject IToastService _toastService
+
   <tr>
-    <td>@Domain.Domain</td>
+      <td><a href="/domain/@Domain.Id">@Domain.Domain (edit)</a></td>
     <td>
-        <a href="/domain/@Domain.Id">(edit)</a>
         <button class="btn btn-danger" @onclick="DeleteAsync">Delete</button>
     </td>
 </tr>
@@ -14,8 +16,17 @@
 
     private async Task DeleteAsync()
     {
-        await _domainDelete.DeleteDomainAsync(Domain.Id);
-        await OnRefresh.InvokeAsync();
+        try
+        {
+            await _domainDelete.DeleteDomainAsync(Domain.Id);
+            await OnRefresh.InvokeAsync();
+            _toastService.ShowSuccess($"Domain deleted successfully.");
+        }
+        catch (BindNineCoreException ex)
+        {
+            _toastService.ShowError(ex.Message);
+        }
+        
     }
 
 }

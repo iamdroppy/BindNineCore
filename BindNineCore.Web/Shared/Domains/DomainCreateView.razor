@@ -1,19 +1,23 @@
 ﻿@using BindNineCore.Abstraction.Domains
-@inject IDomainCreate _domainCreate;
-
+@using BindNineCore.Exceptions
+@inject IDomainCreate _domainCreate
+@inject IToastService _toastService
 @if (!_toggle)
 {
-    <button class="btn btn-dark" @onclick="() => { _toggle = true; } ">Create domain</button>
+    <button class="btn btn-dark" @onclick="() => { _toggle = true; } " style="margin-bottom: 15px;">Create domain</button>
 }
 else
 {
-    <EditForm Model="Model" OnValidSubmit="ValidSubmitAsync">
+    <EditForm Model="Model" OnValidSubmit="ValidSubmitAsync" style="margin-bottom: 15px;">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
 
-        <InputText id="domain" @bind-Value="@Model.Domain"/>
+        <div class="form-group">
+            <label for="domain">Domain</label>
+            <InputText id="domain" @bind-Value="@Model.Domain"  class="form-control" placeholder="Enter domain"/>
+        </div>
 
-        <button type="submit">Create</button>
+        <button type="submit" class="btn btn-success">Create</button>
     </EditForm>
 }
 @code
@@ -25,10 +29,19 @@ else
     
     private async Task ValidSubmitAsync()
     {
-        await _domainCreate.CreateDomainAsync(Model.Domain);
-        _toggle = false;
-        Model = new DomainModel();
-        await OnRefresh.InvokeAsync();
+        try
+        {
+            await _domainCreate.CreateDomainAsync(Model.Domain);
+            _toggle = false;
+            Model = new DomainModel();
+            await OnRefresh.InvokeAsync();
+            
+            _toastService.ShowSuccess($"Domain created successfully.");
+        }
+        catch (BindNineCoreException ex)
+        {
+            _toastService.ShowError(ex.Message);
+        }
     }
 
     private class DomainModel

@@ -15,5 +15,5 @@ $TTL 3D
 ;
 ns              A       172.16.253.1
 {% for record in dns_records %}
-{{ record.subdomain }}  {{ record.record_type }}    {{ record.value }}
+{{ record.subdomain }}   IN   {{ record.record_type }}    {{ record.value }}
 {% endfor %}

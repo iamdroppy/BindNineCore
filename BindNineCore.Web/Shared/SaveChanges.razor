@@ -1,13 +1,15 @@
 ﻿@using BindNineCore.Abstraction
 @inject IBindApplySettings _applySettings
+@inject IToastService _toastService
 
-<button style="width: 100%" class="bg bg-warning" @onclick="ApplyChanges">Apply bind9 settings</button>
+<button class="btn btn-warning" @onclick="ApplyChanges">Save</button>
 
 @code {
 
     private async Task ApplyChanges(MouseEventArgs arg)
     {
         await _applySettings.SaveAsync();
+        _toastService.ShowSuccess("Settings saved successfully to bind9.");
     }
 
 }

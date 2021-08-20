@@ -57,15 +57,6 @@ namespace BindNineCore.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("varchar(64)");
 
-                    b.Property<int>("Expire")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NegativeCacheTtl")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Retry")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Domains");
