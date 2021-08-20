@@ -1,0 +1,4 @@
+zone "{{ domain }}" {
+	type master;
+	file "{{ cfg_save_path }}";
+};

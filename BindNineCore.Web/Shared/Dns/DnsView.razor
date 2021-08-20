@@ -1,0 +1,28 @@
+﻿@using BindNineCore.Abstraction.Dns
+@using BindNineCore.Abstraction
+@inject IDnsDelete _dnsDelete
+
+<div class="col-md-6 lightgray-bg">
+    <div class="dns-box">
+        <input class="item" value="@Dns.Subdomain" disabled/>
+        <select class="item" disabled><option>@Dns.RecordType.ToString()</option></select>
+        <input class="item" disabled value="@Dns.Value"/>
+
+        @if (Dns.CanBeDeleted)
+        {
+            <p class="col-12"><button class="btn btn-danger" @onclick="DeleteAsync">Delete</button></p>
+        }
+    </div>
+</div>
+
+@code
+{
+    [Parameter] public IDns Dns { get; set; }
+    [Parameter] public EventCallback OnRefresh { get; set; }
+
+    private async Task DeleteAsync(MouseEventArgs obj)
+    {
+        await _dnsDelete.DeleteRecordAsync(Dns.Id);
+        await OnRefresh.InvokeAsync();
+    }
+}

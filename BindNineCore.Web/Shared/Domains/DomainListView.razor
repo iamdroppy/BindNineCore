@@ -1,0 +1,48 @@
+﻿@using BindNineCore.Abstraction.Dns
+@using BindNineCore.Abstraction.Domains
+@inject IDomainFetch _domainFetch
+
+@if (_fetched == null)
+{
+    <pre>Loading...</pre>
+}
+else if (!_fetched.Any())
+{
+    <pre>Nothing to display.</pre>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Domain</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var domain in _fetched)
+        {
+            <DomainItemView Domain="@domain" OnRefresh="@FetchAsync"/>
+        }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    private IEnumerable<IDomain> _fetched;
+    [Parameter] public Guid DomainId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await FetchAsync();
+    }
+
+    /// <summary>Fetches all domains</summary>
+    public async Task FetchAsync()
+    {
+        _fetched = _domainFetch.GetDomains();
+        StateHasChanged();
+    }
+}

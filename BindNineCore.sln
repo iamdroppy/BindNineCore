@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BindNineCore", "BindNineCore\BindNineCore.csproj", "{DDE5B86A-ED3E-4D35-9DAF-18015A18916A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BindNineCore.Abstraction", "BindNineCore.Abstraction\BindNineCore.Abstraction.csproj", "{C07BEF3E-575D-47CE-863B-07567104772F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BindNineCore.Web", "BindNineCore.Web\BindNineCore.Web.csproj", "{33321F08-0B6E-49E8-A943-85B57826FFC9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDE5B86A-ED3E-4D35-9DAF-18015A18916A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDE5B86A-ED3E-4D35-9DAF-18015A18916A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDE5B86A-ED3E-4D35-9DAF-18015A18916A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDE5B86A-ED3E-4D35-9DAF-18015A18916A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C07BEF3E-575D-47CE-863B-07567104772F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C07BEF3E-575D-47CE-863B-07567104772F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C07BEF3E-575D-47CE-863B-07567104772F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C07BEF3E-575D-47CE-863B-07567104772F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33321F08-0B6E-49E8-A943-85B57826FFC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33321F08-0B6E-49E8-A943-85B57826FFC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33321F08-0B6E-49E8-A943-85B57826FFC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33321F08-0B6E-49E8-A943-85B57826FFC9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

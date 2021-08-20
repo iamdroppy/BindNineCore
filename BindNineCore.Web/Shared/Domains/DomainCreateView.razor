@@ -1,0 +1,39 @@
+﻿@using BindNineCore.Abstraction.Domains
+@inject IDomainCreate _domainCreate;
+
+@if (!_toggle)
+{
+    <button class="btn btn-dark" @onclick="() => { _toggle = true; } ">Create domain</button>
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="ValidSubmitAsync">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+
+        <InputText id="domain" @bind-Value="@Model.Domain"/>
+
+        <button type="submit">Create</button>
+    </EditForm>
+}
+@code
+{
+    private bool _toggle;
+    [Parameter] public EventCallback OnRefresh { get; set; }
+
+    private DomainModel Model { get; set; } = new ();
+    
+    private async Task ValidSubmitAsync()
+    {
+        await _domainCreate.CreateDomainAsync(Model.Domain);
+        _toggle = false;
+        Model = new DomainModel();
+        await OnRefresh.InvokeAsync();
+    }
+
+    private class DomainModel
+    {
+        [Hostname]
+        public string Domain { get; set; }
+    }
+}

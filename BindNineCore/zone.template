@@ -1,0 +1,19 @@
+;
+; Zone file for {{ domain }}
+;
+; The full zone file
+;
+$TTL 3D
+@       IN      SOA     ns.{{ domain }}. root.{{ domain }}. (
+                        200608081       ; serial, todays date + todays serial # 
+                        8H              ; refresh, seconds
+                        2H              ; retry, seconds
+                        4W              ; expire, seconds
+                        1D )            ; minimum, seconds
+;
+                NS      ns              ; Inet Address of name server
+;
+ns              A       172.16.253.1
+{% for record in dns_records %}
+{{ record.subdomain }}  {{ record.record_type }}    {{ record.value }}
+{% endfor %}

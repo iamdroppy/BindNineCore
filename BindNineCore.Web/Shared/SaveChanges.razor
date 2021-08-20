@@ -1,0 +1,13 @@
+﻿@using BindNineCore.Abstraction
+@inject IBindApplySettings _applySettings
+
+<button style="width: 100%" class="bg bg-warning" @onclick="ApplyChanges">Apply bind9 settings</button>
+
+@code {
+
+    private async Task ApplyChanges(MouseEventArgs arg)
+    {
+        await _applySettings.SaveAsync();
+    }
+
+}

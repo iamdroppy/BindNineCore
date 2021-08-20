@@ -1,0 +1,18 @@
+﻿@page "/domain/{DomainId:guid}"
+
+<DnsCreateView DomainId="DomainId" OnRefresh="@ReloadListAsync"/>
+
+<div class="row">
+    <DnsListView DomainId="DomainId" @ref="_dnsListView" OnRefresh="@ReloadListAsync"/>
+</div>
+
+@code
+{
+    DnsListView _dnsListView;
+    [Parameter] public Guid DomainId { get; set; }
+
+    public async Task ReloadListAsync()
+    {
+        await _dnsListView.FetchAsync();
+    }
+}

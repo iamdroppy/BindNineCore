@@ -1,0 +1,4 @@
+.full-width { width: 100%; }
+.lightgray-bg { background-color: lightgray; }
+.dns-box { margin: 10px; padding: 10px; border-radius:4px; }
+.dns-box .item { width: 100%; padding-top: 10px; padding-bottom: 10px;margin-top: 10px; margin-bottom: 10px; }

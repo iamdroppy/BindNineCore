@@ -1,0 +1,21 @@
+﻿@using BindNineCore.Web.Pages
+@using BindNineCore.Abstraction.Domains
+@inject IDomainDelete _domainDelete
+  <tr>
+    <td>@Domain.Domain</td>
+    <td>
+        <a href="/domain/@Domain.Id">(edit)</a>
+        <button class="btn btn-danger" @onclick="DeleteAsync">Delete</button>
+    </td>
+</tr>
+@code {
+    [Parameter] public IDomain Domain { get; set; }
+    [Parameter] public EventCallback OnRefresh { get; set; }
+
+    private async Task DeleteAsync()
+    {
+        await _domainDelete.DeleteDomainAsync(Domain.Id);
+        await OnRefresh.InvokeAsync();
+    }
+
+}

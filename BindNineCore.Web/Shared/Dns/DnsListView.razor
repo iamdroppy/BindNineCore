@@ -1,0 +1,38 @@
+﻿@using BindNineCore.Abstraction.Dns
+@inject IDnsFetch _dnsFetch
+
+@if (_fetched == null)
+{
+    <pre>Loading...</pre>
+}
+else if (!_fetched.Any())
+{
+    <pre>Nothing to display.</pre>
+}
+else
+{
+    foreach (var dns in _fetched)
+    {
+        <DnsView Dns="dns" OnRefresh="@OnRefresh"/>
+    }
+}
+
+@code
+{
+    private IEnumerable<IDns> _fetched;
+    [Parameter] public Guid DomainId { get; set; }
+    [Parameter] public EventCallback OnRefresh { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await FetchAsync();
+    }
+    
+    /// <summary>Fetches all dns for a given domain with <see cref="DomainId"/></summary>
+    public async Task FetchAsync()
+    {
+        _fetched = await _dnsFetch.GetDnsByDomainAsync(DomainId);
+        StateHasChanged();
+    }
+}

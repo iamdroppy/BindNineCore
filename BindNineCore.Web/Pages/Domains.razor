@@ -1,0 +1,14 @@
+﻿@page "/domains"
+
+<DomainCreateView OnRefresh="@RefreshContent"/>
+
+<DomainListView @ref="_domainListView"/>
+
+@code
+{
+    DomainListView _domainListView;
+    public async Task RefreshContent()
+    {
+        await _domainListView.FetchAsync();
+    }
+}
