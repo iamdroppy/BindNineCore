@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Runtime.Serialization;
 using BindNineCore.Abstraction;
 using BindNineCore.Abstraction.Dns;
 using BindNineCore.Abstraction.Domains;
@@ -25,6 +26,20 @@ namespace BindNineCore
 
             if (!Directory.Exists(config.BindPath))
                 throw new BindDirectoryNotFoundException(config.BindPath);
+
+            // create test file and delete.
+
+            var rnd = new Random();
+            var path = Path.Combine(config.BindPath, "tmp_" + rnd.Next(0, 999999) + ".txt");
+            try
+            {
+                File.WriteAllText(path, "WRITE_TEST");
+                File.Delete(path);
+            }
+            catch (Exception ex)
+            {
+                throw new BindDirectoryDeniedException(path, ex);
+            }
             
             return services
                 .AddSingleton(config)

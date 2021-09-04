@@ -40,7 +40,7 @@ namespace BindNineCore.Core.Services.Bind9
                 foreach (var domain in domains)
                 {
                     token.ThrowIfCancellationRequested();
-                    await writer.WriteLineAsync(await GetLiquidAsync("named.template", domain, token));
+                    await writer.WriteLineAsync(await GetLiquidAsync("named.liquid", domain, token));
                     await WriteZoneAsync(domain, Path.Join(_cfg.BindPath, "zones", "db." + domain.Domain), token);
                 }
 
@@ -62,7 +62,7 @@ namespace BindNineCore.Core.Services.Bind9
             await using StreamWriter writer = new(new FileStream(path, FileMode.Create, FileAccess.Write)) 
                 { AutoFlush = false};
             
-            await writer.WriteLineAsync(await GetLiquidAsync("zone.template", domain, token));
+            await writer.WriteLineAsync(await GetLiquidAsync("zone.liquid", domain, token));
             // write NS records
             
             // ReSharper disable once HeapView.ObjectAllocation.Possible
@@ -72,12 +72,7 @@ namespace BindNineCore.Core.Services.Bind9
             token.ThrowIfCancellationRequested();
             await writer.FlushAsync();
         }
-
-        private Task WriteRecordAsync(StreamWriter writer, DomainEntity domain, DnsEntity dns)
-        {
-            return writer.WriteLineAsync(
-                $"{dns.Subdomain}.{domain.Domain}.          IN      {dns.RecordType.GetShortName()}       {dns.Value}");
-        }
+        
         private Stream GetNamedConfigStream()
         {
             FileInfo namedConfigLocal = new (Path.Join(_cfg.BindPath, "named.conf.local"));
@@ -90,22 +85,22 @@ namespace BindNineCore.Core.Services.Bind9
         {
             if (_cfg.PostBuild is not { } builds) return;
             _logger.LogInformation($"Running {builds.Length} post-builds...");
-            foreach (var b in builds)
+            foreach (var build in builds)
             {
                 try
                 {
                     ProcessStartInfo psi = new()
                     {
                         CreateNoWindow = true,
-                        FileName = b.Bin,
-                        Arguments = b.Args
+                        FileName = build.Bin,
+                        Arguments = build.Args
                     };
                     Process proc = new Process() {StartInfo = psi};
                     proc.Start();
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogCritical(ex.Message, ex);
+                    _logger.LogCritical("Critical when running post-build: " + ex.Message, ex);
                 }
             }
             _logger.LogInformation($"Post-builds done.");
