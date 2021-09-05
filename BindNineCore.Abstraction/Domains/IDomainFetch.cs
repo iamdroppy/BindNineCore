@@ -22,6 +22,15 @@ namespace BindNineCore.Abstraction.Domains
         Task<IDomain> FindDomainAsync([Hostname] string domain, CancellationToken token = default);
         
         /// <summary>
+        /// Finds a domain by the exact domain name.
+        /// </summary>
+        /// <param name="domainId">Domain unique id</param>
+        /// <param name="token">Cancellation token</param>
+        /// <returns>Domain</returns>
+        /// <exception cref="Exception">Throws an exception if the domain is not found.</exception>
+        Task<IDomain> FindDomainAsync([Hostname] Guid domainId, CancellationToken token = default);
+
+        /// <summary>
         /// Checks if the domain exists on the database.
         /// </summary>
         /// <param name="domain">Domain</param>

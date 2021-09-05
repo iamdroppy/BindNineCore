@@ -27,6 +27,11 @@ namespace BindNineCore.Core.Services.Domain
             return await _dbContext.Domains.AsNoTracking().SingleAsync(s => s.Domain == domain, cancellationToken: token);
         }
 
+        public async Task<IDomain> FindDomainAsync(Guid domainId, CancellationToken token = default)
+        {
+            return await _dbContext.Domains.AsNoTracking().SingleAsync(s => s.Id == domainId, cancellationToken: token);
+        }
+
         public Task<bool> HasDomainAsync(string domain, CancellationToken token = default)
         {
             return _dbContext.Domains.AsNoTracking().AnyAsync(s => s.Domain == domain, cancellationToken: token);

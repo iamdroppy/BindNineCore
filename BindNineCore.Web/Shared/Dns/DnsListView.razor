@@ -1,4 +1,7 @@
 ﻿@using BindNineCore.Abstraction.Dns
+@using BindNineCore.Abstraction.Domains
+@using BindNineCore.Core.Database.Entities
+@using BindNineCore.Abstraction
 @inject IDnsFetch _dnsFetch
 
 @if (_fetched == null)
@@ -20,7 +23,7 @@ else
 @code
 {
     private IEnumerable<IDns> _fetched;
-    [Parameter] public Guid DomainId { get; set; }
+    [Parameter] public IDomain Domain { get; set; }
     [Parameter] public EventCallback OnRefresh { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -29,10 +32,10 @@ else
         await FetchAsync();
     }
     
-    /// <summary>Fetches all dns for a given domain with <see cref="DomainId"/></summary>
+    /// <summary>Fetches all dns for a given domain with <see cref="Domain"/></summary>
     public async Task FetchAsync()
     {
-        _fetched = await _dnsFetch.GetDnsByDomainAsync(DomainId);
+        _fetched = (await _dnsFetch.GetDnsByDomainAsync(Domain)).Where(s=>s.RecordType != RecordType.Nameserver);
         StateHasChanged();
     }
 }

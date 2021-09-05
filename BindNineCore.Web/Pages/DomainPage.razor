@@ -1,0 +1,44 @@
+﻿@page "/domain/{DomainId:guid}"
+@using BindNineCore.Core.Database.Entities
+@using BindNineCore.Abstraction.Domains
+@inject IDomainFetch _domainFetch
+
+@if (_domain == null)
+{
+    if (_loaded)
+    {
+        <pre>Domain not found.</pre>
+    }
+    else
+    {
+        <pre>Loading...</pre>
+    }
+}
+else
+{
+    <DnsCreateView Domain="_domain" OnRefresh="@ReloadListAsync"/>
+
+    <div class="row">
+        <DnsListView Domain="_domain" @ref="_dnsListView" OnRefresh="@ReloadListAsync"/>
+    </div>
+}
+
+@code
+{
+    DnsListView _dnsListView;
+    [Parameter] public Guid DomainId { get; set; }
+    private IDomain _domain;
+    private bool _loaded = false;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _domain = await _domainFetch.FindDomainAsync(DomainId);
+        _loaded = true;
+    }
+
+    public async Task ReloadListAsync()
+    {
+        
+        await _dnsListView.FetchAsync();
+    }
+}

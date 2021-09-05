@@ -118,7 +118,7 @@ namespace BindNineCore.Core.Services.Bind9
                         {
                             subdomain = s.Subdomain,
                             record_type = s.ZoneRecordType,
-                            value = s.Value
+                            value = s.RecordType == RecordType.Text ? $"\"{s.Value}\"" : s.Value
                         })).ToArray(),
                     save_path = Path.Join(_cfg.BindPath, "zones", "db." + domain.Domain),
                     cfg_save_path = Path.Join(_cfg.BindPathConfigOverride ?? _cfg.BindPath, "zones", "db." + domain.Domain).Replace("\\", "/")

@@ -1,17 +1,19 @@
 ﻿@using BindNineCore.Abstraction.Domains
 @using BindNineCore.Abstraction.Dns
 @using BindNineCore.Abstraction
+@using BindNineCore.Core.Database.Entities
 @using BindNineCore.Exceptions
+@using BindNineCore.Web.Pages
 @inject IDnsCreate _dnsCreate;
 @inject IToastService _toastService
 
+<h3>@Domain.Domain</h3>
 @if (!_toggle)
 {
     <button class="btn btn-dark" @onclick="() => { _toggle = true; } " style="margin-bottom: 15px;">Add Record</button>
 }
 else
 {
-    
     <EditForm Model="Model" OnValidSubmit="ValidSubmitAsync" style="margin-bottom: 15px;">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
@@ -22,7 +24,8 @@ else
         <div class="form-group">
             <label for="recordType">Subdomain</label>
             <InputSelect @bind-Value="@Model.RecordType" class="form-control" id="recordType">
-                <option value="@RecordType.Alias">Alias</option>
+                <option value="@RecordType.Alias">A</option>
+                <option value="@RecordType.Text">TXT</option>
                 <option value="@RecordType.CNAME">CNAME</option>
             </InputSelect>
         </div>
@@ -37,7 +40,7 @@ else
 @code
 {
     private bool _toggle;
-    [Parameter] public Guid DomainId { get; set; }
+    [Parameter] public IDomain Domain { get; set; }
     [Parameter] public EventCallback OnRefresh { get; set; }
     private DomainModel Model { get; set; } = new ();
     
@@ -45,11 +48,11 @@ else
     {
         try
         {
-            await _dnsCreate.AddDnsToDomainAsync(DomainId, Model.Subdomain, Model.RecordType, Model.Value);
+            await _dnsCreate.AddDnsToDomainAsync(Domain, Model.Subdomain, Model.RecordType, Model.Value);
             _toggle = false;
             Model = new DomainModel();
             await OnRefresh.InvokeAsync();
-            _toastService.ShowSuccess($"Subdomain {Model.Subdomain} added successfully.");
+            _toastService.ShowSuccess($"Subdomain {Model.Subdomain} added successfully to {Domain.Domain}.");
         }
         catch (BindNineCoreException ex)
         {
